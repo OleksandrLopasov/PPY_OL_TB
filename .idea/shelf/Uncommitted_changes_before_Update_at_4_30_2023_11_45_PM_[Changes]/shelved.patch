@@ -1,0 +1,30 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from .my_tools import map_\r\n\r\ndef main() -> None:\r\n    for x in map_(lambda x: x + 1, range(5)):\r\n        print(x)\r\n\r\n\r\nif __name__ == \"__main__\":\r\n    main()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision 4d9407aebe12c8aeb4f335c4b9f74991b243f5c5)
++++ b/main.py	(date 1682875169237)
+@@ -1,9 +1,13 @@
+-from .my_tools import map_
++#from .my_tools import map_
+ 
+-def main() -> None:
+-    for x in map_(lambda x: x + 1, range(5)):
+-        print(x)
++#def main() -> None:
++    #for x in map_(lambda x: x + 1, range(5)):
++        #print(x)
+ 
++from fastapi import FastAPI
+ 
+-if __name__ == "__main__":
+-    main()
++app  = FastAPI()
++
++@app.get('/')
++def greeting():
++    return {"Hello" : "World"}
