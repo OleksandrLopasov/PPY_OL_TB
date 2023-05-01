@@ -1,1 +1,2 @@
-from .my_tools import map_
+from .my_tools import *
+from .main import *
