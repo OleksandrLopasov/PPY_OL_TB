@@ -52,8 +52,22 @@ class Pack:
 
     idpack: Mapped[int] = mapped_column(primary_key=True)
     packname: Mapped[str] = mapped_column()
-    idplayer: Mapped[int] = mapped_column(foreign_key=True)
-    player: Mapped[Player] = relationship()
+    idplayer: Mapped[int] = mapped_column(ForeignKey("player.idplayer"))
+
+@mapper_registry.mapped_as_dataclass
+class Truth_Pack:
+    __tablename__ = "pack_truth"
+
+    idpack: Mapped[int] = mapped_column(ForeignKey("pack.idpack"), primary_key=True)
+    idtruth: Mapped[int] = mapped_column(ForeignKey("truth.idtruth", primary_key=True))
+
+
+@mapper_registry.mapped_as_dataclass
+class Dare_Pack:
+    __tablename__ = "dare_pack"
+
+    idpack: Mapped[int] = mapped_column(ForeignKey("pack.idpack"), primary_key=True)
+    iddare: Mapped[int] = mapped_column(ForeignKey("dare.iddare"), primary_key=True)
 
 
 metadata.create_all(bind=engine)
@@ -91,13 +105,10 @@ async def create_pack(pack: Pack):
 
 
 @app.put("/packs/{pack_id}")
-async def update_pack(pack_id: int, pack: Pack):
+async def update_pack(pack_id: int, new_name: str):
     pack_to_update = session.query(Pack).filter(Pack.idpack == pack_id).first()
     if pack_to_update:
-        if pack.Name:
-            pack_to_update.Name = pack.Name
-        if pack.idplayer:
-            pack_to_update.idplayer = pack.idplayer
+        pack_to_update.Name = new_name
         session.commit()
         return pack_to_update
     raise HTTPException(
@@ -193,4 +204,77 @@ async def delete_user(player_id: int):
         status_code=404,
         detail=f"Truth with id {player_id} does not exist"
     )
+
+@app.get("/dare-packs/")
+async def read_dare_packs():
+    dare_packs = session.query(Dare_Pack).all()
+    return dare_packs
+
+
+@app.post("/dare-packs/")
+async def create_dare_pack(dare_pack: Dare_Pack):
+    session.add(dare_pack)
+    session.commit()
+    return dare_pack
+
+
+@app.put("/dare-packs/{dare_id}/{pack_id}")
+async def update_dare_pack(dare_id: int, pack_id: int, dare_pack: Dare_Pack):
+    dare_pack_to_update = session.query(Dare_Pack).filter(Dare_Pack.idDare == dare_id, Dare_Pack.idPack == pack_id).first()
+    if dare_pack_to_update:
+        if dare_pack.idDare:
+            dare_pack_to_update.idDare = dare_pack.idDare
+        if dare_pack.idPack:
+            dare_pack_to_update.idPack = dare_pack.idPack
+        session.commit()
+        return dare_pack_to_update
+    raise HTTPException(
+        status_code=404,
+        detail=f"Dare with id {dare_id} does not exist"
+    )
+
+
+@app.delete("/dare-packs/{dare_id}/{pack_id}")
+async def delete_dare_pack(dare_id: int, pack_id: int):
+    dare_pack_to_delete = session.query(Dare_Pack).filter(Dare_Pack.idDare == dare_id, Dare_Pack.idPack == pack_id).first()
+    if dare_pack_to_delete:
+        session.delete(dare_pack_to_delete)
+        session.commit()
+        return "Dare pack deleted successfully"
+    return "Dare pack not found"
+
+@app.get("/truth-packs/")
+async def read_truth_packs():
+    truth_packs = session.query(Truth_Pack).all()
+    return truth_packs
+
+
+@app.post("/truth-packs/")
+async def create_truth_pack(truth_pack: Truth_Pack):
+    session.add(truth_pack)
+    session.commit()
+    return truth_pack
+
+
+@app.put("/truth-packs/{truth_id}/{pack_id}")
+async def update_truth_pack(truth_id: int, pack_id: int, truth_pack: Truth_Pack):
+    truth_pack_to_update = session.query(Truth_Pack).filter(Truth_Pack.idTruth == truth_id, Truth_Pack.idPack == pack_id).first()
+    if truth_pack_to_update:
+        if truth_pack.idTruth:
+            truth_pack_to_update.idTruth = truth_pack.idTruth
+        if truth_pack.idPack:
+            truth_pack_to_update.idPack = truth_pack.idPack
+        session.commit()
+        return truth_pack_to_update
+    return "Truth pack not found"
+
+
+@app.delete("/truth-packs/{truth_id}/{pack_id}")
+async def delete_truth_pack(truth_id: int, pack_id: int):
+    truth_pack_to_delete = session.query(Truth_Pack).filter(Truth_Pack.idTruth == truth_id, Truth_Pack.idPack == pack_id).first()
+    if truth_pack_to_delete:
+        session.delete(truth_pack_to_delete)
+        session.commit()
+        return "Truth pack deleted successfully"
+    return "Truth pack not found"
 
