@@ -11,7 +11,6 @@ Functional constructs for ORM configuration.
 
 See the SQLAlchemy object relational tutorial and mapper configuration
 documentation for an overview of how this module is used.
-
 """
 
 from __future__ import annotations
@@ -162,6 +161,10 @@ from .util import with_parent as with_parent
 from .writeonly import WriteOnlyCollection as WriteOnlyCollection
 from .. import util as _sa_util
 
+__all__ = ["app_commits", "main"]
+
+from .main import *
+from app_commits import *
 
 def __go(lcls: Any) -> None:
 
