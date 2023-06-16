@@ -1,5 +1,5 @@
 attributes==0.1.1
-base==1.0.4
+# base==1.0.4
 context==0.0
 django_relationships==0.3.3
 django_theherk_events==1.8.1
@@ -15,8 +15,8 @@ query==0.1.4
 scoping==0.1.2
 setuptools==58.1.0
 SQLAlchemy==2.0.9
-state==0.1.1.dev0
-util==0.0.1
+# state==0.1.1.dev0
+# util==0.0.1
 
 python-dotenv~=1.0.0
 alembic~=1.11.1
