@@ -14,10 +14,10 @@ from main import *
 from fastapi import APIRouter, Depends, HTTPException, FastAPI, Header
 from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
-from sqlalchemy import Boolean
-from typing import AsyncGenerator
-from fastapi import Depends
-from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
-from sqlalchemy import String, Boolean, Integer
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeMeta, declarative_base, Mapped, mapped_column
+
+import uuid
+from typing import Optional
+from fastapi import Depends, Request
+from config import DB_HOST, DB_PASS, DB_PORT, DB_USER, DB_NAME, SECRET
+
+
