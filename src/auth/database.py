@@ -1,12 +1,4 @@
-from typing import AsyncGenerator
-from fastapi import Depends
-from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
-from sqlalchemy import String, Boolean, Integer
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import Mapped, mapped_column, declarative_base, DeclarativeMeta
-from fastapi_users.db import SQLAlchemyBaseUserTable
-
-from config import DB_HOST, DB_PASS, DB_PORT, DB_USER, DB_NAME
+from src.auth.utils import *
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 Base: DeclarativeMeta = declarative_base()

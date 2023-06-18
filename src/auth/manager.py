@@ -1,10 +1,4 @@
-from typing import Optional
-
-from fastapi import Depends, Request
-from fastapi_users import BaseUserManager, IntegerIDMixin, schemas, models, exceptions
-from auth.database import User, get_user_db
-
-from config import SECRET
+from src.auth.utils import *
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):

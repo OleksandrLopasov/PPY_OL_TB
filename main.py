@@ -1,18 +1,17 @@
 from fastapi import FastAPI, Depends
-from fastapi_users import FastAPIUsers
 
-from auth.auth import auth_backend
-from auth.database import User, get_user_db
-from auth.manager import get_user_manager
-from auth.schemas import UserRead, UserCreate
+from src.auth.auth import auth_backend
+from src.auth.database import User
+from src.auth.schemas import UserRead, UserCreate
+from src.auth.auth import fastapi_users
+from src.auth.auth import current_user
+
+from src.operations.truth_router import truth_router
+from src.operations.dare_router import dare_router
+from src.operations.pack_router import pack_router
 
 app = FastAPI(
     title="Gamaster"
-)
-
-fastapi_users = FastAPIUsers[User, int](
-    get_user_manager,
-    [auth_backend],
 )
 
 app.include_router(
@@ -27,7 +26,9 @@ app.include_router(
     tags=["auth"],
 )
 
-current_user = fastapi_users.current_user()
+app.include_router(truth_router)
+app.include_router(dare_router)
+app.include_router(pack_router)
 
 
 @app.get("/protected-route")

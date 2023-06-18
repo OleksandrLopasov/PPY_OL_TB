@@ -1,4 +1,4 @@
-from utils import *
+from src.auth.utils import *
 
 metadata = MetaData()
 mapper_registry = registry(metadata=metadata)
@@ -16,6 +16,12 @@ class user:
     packs: Mapped[List["pack"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
+    truths: Mapped[List["truth"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    dares: Mapped[List["dare"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
 
     is_active: Mapped[bool] = mapped_column("is_active", default=True, nullable=False)
     is_superuser: Mapped[bool] = mapped_column("is_superuser", default=False, nullable=False)
@@ -31,10 +37,10 @@ class pack:
     id_user: Mapped[int] = mapped_column(ForeignKey(user.id))
 
     truths: Mapped[List["truth"]] = relationship(
-        "truth", secondary="truth_pack", back_populates="packs", cascade="all, delete-orphan"
+        "truth", secondary="truth_pack", back_populates="packs"
     )
     dares: Mapped[List["dare"]] = relationship(
-        "dare", secondary="dare_pack", back_populates="packs", cascade="all, delete-orphan"
+        "dare", secondary="dare_pack", back_populates="packs"
     )
 
     user: Mapped["user"] = relationship(
@@ -48,10 +54,14 @@ class dare:
 
     id_dare: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(String(255))
-    id_pack: Mapped[int] = mapped_column(ForeignKey(pack.id_pack))
+    id_pack: Mapped[int] = mapped_column(ForeignKey(pack.id_pack), nullable=True)
+    id_user: Mapped[int] = mapped_column(ForeignKey(user.id))
 
     packs: Mapped[List["pack"]] = relationship(
-        "pack", secondary="dare_pack", back_populates="dares", cascade="all, delete-orphan"
+        "pack", secondary="dare_pack", back_populates="dares"
+    )
+    user: Mapped["user"] = relationship(
+        back_populates="dares"
     )
 
 
@@ -70,9 +80,13 @@ class truth:
     id_truth: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(String(255))
     id_pack: Mapped[int] = mapped_column(ForeignKey(pack.id_pack))
+    id_user: Mapped[int] = mapped_column(ForeignKey(user.id))
 
     packs: Mapped["pack"] = relationship(
-        "pack", secondary="truth_pack", back_populates="truths", cascade="all, delete-orphan"
+        "pack", secondary="truth_pack", back_populates="truths"
+    )
+    user: Mapped["user"] = relationship(
+        back_populates="truths"
     )
 
 
