@@ -69,20 +69,6 @@ async def add_dare(new_dare: DareCreate,
         })
 
 
-@dare_router.patch("/update_dare")
-async def update_dare(new_dare: DareUpdate,
-                      user: User = Depends(current_user),
-                      session: AsyncSession = Depends(get_async_session)):
-    try:
-        return
-    except Exception:
-        raise HTTPException(status_code=500, detail={
-            "status": "error",
-            "data": None,
-            "details": "Unauthorized user"
-        })
-
-
 # add dare to pack
 @dare_router.post("/add_dare_to_pack")
 async def add_dare_to_pack(new_dare_pack: DarePackCreate,

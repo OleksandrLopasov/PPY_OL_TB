@@ -52,10 +52,6 @@ class DareRead(ComponentBaseModel):
         orm_mode = True
 
 
-class DareUpdate(ComponentBaseModel):
-    pass
-
-
 # Shared fields for truth_pack and dare_pack
 class ComponentPackBaseModel(BaseModel):
     id_pack: int
