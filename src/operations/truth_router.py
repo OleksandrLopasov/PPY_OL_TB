@@ -20,7 +20,7 @@ async def get_truths(user: User = Depends(current_user),
                      session: AsyncSession = Depends(get_async_session)):
     query = select(truth).where(truth.id_user == user.id)
     result = await session.execute(query)
-    return result.all()
+    return result.mappings().all()
 
 
 # select truth that contains desired task

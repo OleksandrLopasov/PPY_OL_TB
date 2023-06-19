@@ -20,7 +20,7 @@ async def get_packs(user: User = Depends(current_user),
                     session: AsyncSession = Depends(get_async_session)):
     query = select(pack).where(pack.id_user == user.id)
     result = await session.execute(query)
-    return result.all()
+    return result.mappings().all()
 
 
 # add truth

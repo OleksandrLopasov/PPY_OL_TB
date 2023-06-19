@@ -7,7 +7,7 @@ from src.auth.database import get_async_session
 from src.auth.models import dare, pack, dare_pack
 from src.auth.auth import current_user
 from src.auth.database import User
-from src.operations.schemas import DareCreate, DarePackCreate, DareUpdate
+from src.operations.schemas import DareCreate, DarePackCreate
 
 dare_router = APIRouter(
     prefix="/dare",
@@ -21,10 +21,9 @@ async def get_dares(user: User = Depends(current_user),
                     session: AsyncSession = Depends(get_async_session)):
     query = select(dare).where(dare.id_user == user.id).options(selectinload(dare.packs))
     result = await session.execute(query)
-    dares = result.unique().scalars().all()
     return {
         "status": "success",
-        "data": list(dares),
+        "data": result.mappings().all(),
         "details": None
     }
 
