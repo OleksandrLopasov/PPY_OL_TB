@@ -19,35 +19,67 @@ class PackCreate(PackBase):
     pass
 
 
-# Truth
-class TruthBase(BaseModel):
+# Shared fields for truth and dare
+class ComponentBaseModel(BaseModel):
     text: str
-    id_user: int
 
 
-class TruthRead(TruthBase):
-    id_pack: List[int] = []
+# Truth
+class TruthRead(ComponentBaseModel):
+    pass
 
     class Config:
         orm_mode = True
 
 
-class TruthCreate(TruthBase):
-    id_pack: int
+class TruthCreate(ComponentBaseModel):
+    id_user: int
+
+
+class TruthUpdate(ComponentBaseModel):
+    pass
 
 
 # Dare
-class DareBase(BaseModel):
-    text: str
+class DareCreate(ComponentBaseModel):
     id_user: int
 
 
-class DareCreate(DareBase):
-    id_pack: int
-
-
-class DareRead(DareBase):
-    id_pack: List[int] = []
+class DareRead(ComponentBaseModel):
+    pass
 
     class Config:
         orm_mode = True
+
+
+class DareUpdate(ComponentBaseModel):
+    pass
+
+
+# Shared fields for truth_pack and dare_pack
+class ComponentPackBaseModel(BaseModel):
+    id_pack: int
+
+
+# Truth_Pack
+class TruthPackCreate(ComponentPackBaseModel):
+    id_truth: int
+
+    class Config:
+        orm_mode = True
+
+
+class TruthPackRead(ComponentPackBaseModel):
+    id_truth: int
+
+
+# Dare_Pack
+class DarePackCreate(ComponentPackBaseModel):
+    id_dare: int
+
+    class Config:
+        orm_mode = True
+
+
+class DarePackRead(ComponentPackBaseModel):
+    id_dare: int

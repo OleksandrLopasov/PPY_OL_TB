@@ -1,4 +1,11 @@
-from src.auth.utils import *
+from src.config import SECRET
+
+from fastapi import Depends, Request
+from fastapi_users import BaseUserManager, IntegerIDMixin, schemas, models, exceptions
+from src.auth.database import User, get_user_db
+
+from typing import Optional
+from fastapi_users import schemas
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):

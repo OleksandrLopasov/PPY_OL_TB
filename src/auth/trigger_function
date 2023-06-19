@@ -1,0 +1,45 @@
+CREATE FUNCTION public.create_default_pack()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    truth_ids INT[];
+    dare_ids INT[];
+    pack_id INT;
+BEGIN
+    -- Generate basic truths
+    INSERT INTO truth (text, id_user)
+    VALUES ('What is your biggest fear?', NEW.id),
+           ('Have you ever lied to your best friend?', NEW.id),
+           ('What is your most embarrassing moment?', NEW.id),
+           ('Have you ever cheated on a test?', NEW.id),
+           ('What is the most adventurous thing you have ever done?', NEW.id)
+    RETURNING id_truth INTO truth_ids;
+
+    -- Generate basic dares
+    INSERT INTO dare (text, id_user)
+    VALUES ('Sing a song in public.', NEW.id),
+           ('Do a funny dance in front of everyone.', NEW.id),
+           ('Eat a spoonful of hot sauce.', NEW.id),
+           ('Text your crush and confess your feelings.', NEW.id),
+           ('Do a handstand for ten seconds.', NEW.id)
+    RETURNING id_dare INTO dare_ids;
+
+    -- Create a new pack
+    INSERT INTO pack (packname, id_user)
+    VALUES ('default', NEW.id)
+    RETURNING id_pack INTO pack_id;
+
+    -- Connect the pack with truths
+    INSERT INTO truth_pack (id_truth, id_pack)
+    SELECT id, pack_id
+    FROM unnest(truth_ids) AS id;
+
+    -- Connect the pack with dares
+    INSERT INTO dare_pack (id_dare, id_pack)
+    SELECT id, pack_id
+    FROM unnest(dare_ids) AS id;
+
+    RETURN NEW;
+END;
+$$;

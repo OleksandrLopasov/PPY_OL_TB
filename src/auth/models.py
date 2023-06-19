@@ -1,4 +1,7 @@
-from src.auth.utils import *
+from typing import List
+from sqlalchemy import MetaData, ForeignKey, String, Integer
+from sqlalchemy.orm import registry, Mapped, mapped_column, relationship
+
 
 metadata = MetaData()
 mapper_registry = registry(metadata=metadata)
@@ -34,13 +37,13 @@ class pack:
 
     id_pack: Mapped[int] = mapped_column(primary_key=True)
     packname: Mapped[str] = mapped_column("packname")
-    id_user: Mapped[int] = mapped_column(ForeignKey(user.id))
+    id_user: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
     truths: Mapped[List["truth"]] = relationship(
-        "truth", secondary="truth_pack", back_populates="packs"
+        secondary="truth_pack", back_populates="packs"
     )
     dares: Mapped[List["dare"]] = relationship(
-        "dare", secondary="dare_pack", back_populates="packs"
+        secondary="dare_pack", back_populates="packs"
     )
 
     user: Mapped["user"] = relationship(
@@ -49,16 +52,23 @@ class pack:
 
 
 @mapper_registry.mapped_as_dataclass
+class dare_pack:
+    __tablename__ = "dare_pack"
+
+    id_pack: Mapped[int] = mapped_column(Integer, ForeignKey("pack.id_pack"), primary_key=True)
+    id_dare: Mapped[int] = mapped_column(Integer, ForeignKey("dare.id_dare"), primary_key=True)
+
+
+@mapper_registry.mapped_as_dataclass
 class dare:
     __tablename__ = "dare"
 
     id_dare: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(String(255))
-    id_pack: Mapped[int] = mapped_column(ForeignKey(pack.id_pack), nullable=True)
-    id_user: Mapped[int] = mapped_column(ForeignKey(user.id))
+    id_user: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
     packs: Mapped[List["pack"]] = relationship(
-        "pack", secondary="dare_pack", back_populates="dares"
+        secondary="dare_pack", back_populates="dares"
     )
     user: Mapped["user"] = relationship(
         back_populates="dares"
@@ -66,11 +76,11 @@ class dare:
 
 
 @mapper_registry.mapped_as_dataclass
-class dare_pack:
-    __tablename__ = "dare_pack"
+class truth_pack:
+    __tablename__ = "truth_pack"
 
-    id_pack: Mapped[int] = mapped_column(Integer, ForeignKey(pack.id_pack), primary_key=True)
-    id_dare: Mapped[int] = mapped_column(Integer, ForeignKey(dare.id_dare), primary_key=True)
+    id_pack: Mapped[int] = mapped_column(Integer, ForeignKey("pack.id_pack"), primary_key=True)
+    id_truth: Mapped[int] = mapped_column(Integer, ForeignKey("truth.id_truth"), primary_key=True)
 
 
 @mapper_registry.mapped_as_dataclass
@@ -79,22 +89,14 @@ class truth:
 
     id_truth: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(String(255))
-    id_pack: Mapped[int] = mapped_column(ForeignKey(pack.id_pack))
-    id_user: Mapped[int] = mapped_column(ForeignKey(user.id))
+    id_user: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
     packs: Mapped["pack"] = relationship(
-        "pack", secondary="truth_pack", back_populates="truths"
+        secondary="truth_pack", back_populates="truths"
     )
     user: Mapped["user"] = relationship(
         back_populates="truths"
     )
 
-
-@mapper_registry.mapped_as_dataclass
-class truth_pack:
-    __tablename__ = "truth_pack"
-
-    id_pack: Mapped[int] = mapped_column(Integer, ForeignKey(pack.id_pack), primary_key=True)
-    id_truth: Mapped[int] = mapped_column(Integer, ForeignKey(truth.id_truth), primary_key=True)
-
-
+    def __repr__(self):
+        return f"{self.text}"
