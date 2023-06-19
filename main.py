@@ -10,12 +10,14 @@ from src.auth.auth import current_user
 from src.operations.truth_router import truth_router
 from src.operations.dare_router import dare_router
 from src.operations.pack_router import pack_router
-from src.pages.router import router
+from src.pages.pages_router import pages_router
 
 
 app = FastAPI(
     title="Gamaster"
 )
+
+app.mount("/src/static", StaticFiles(directory="src/static"), name="static")
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -32,7 +34,7 @@ app.include_router(
 app.include_router(truth_router)
 app.include_router(dare_router)
 app.include_router(pack_router)
-app.include_router(router)
+app.include_router(pages_router)
 
 
 @app.get("/protected-route")

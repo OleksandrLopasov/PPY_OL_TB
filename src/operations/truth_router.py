@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,13 +24,24 @@ async def get_truths(user: User = Depends(current_user),
 
 
 # select truth that contains desired task
-@truth_router.get("/get_truth(s)/{text_to_search}")
-async def get_truths(text_to_search: str,
-                     user: User = Depends(current_user),
-                     session: AsyncSession = Depends(get_async_session)):
-    query = select(truth).where(truth.id_user == user.id).where(truth.text.contains(text_to_search))
-    result = await session.execute(query)
-    return result.all()
+@truth_router.get("")
+async def get_truths_containing_text(text_to_search: str,
+                                     user: User = Depends(current_user),
+                                     session: AsyncSession = Depends(get_async_session)):
+    try:
+        query = select(truth).where(truth.id_user == user.id).where(truth.text.contains(text_to_search))
+        result = await session.execute(query)
+        return {
+            "status": "success",
+            "data": result.scalars().all(),
+            "details": None
+        }
+    except Exception:
+        raise HTTPException(status_code=400, detail={
+            "status": "error",
+            "data": None,
+            "details": "Unauthorized user"
+        })
 
 
 # add truth
@@ -63,4 +74,4 @@ async def add_truth_to_pack(new_truth_pack: TruthPackCreate,
     stmt = insert(truth_pack).values(**new_truth_pack.dict())
     await session.execute(stmt)
     await session.commit()
-    return {"status": "success"}
+    return {"status": "success"}\

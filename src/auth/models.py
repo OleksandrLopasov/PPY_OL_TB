@@ -15,13 +15,13 @@ class user(Base):
     username: Mapped[str] = mapped_column("username")
     hashed_password: Mapped[str] = mapped_column("hashed_password")
 
-    packs: Mapped[Optional[List["pack"]]] = relationship(
+    packs: Mapped[List["pack"]] = relationship(
         "pack", back_populates="user", cascade="all, delete-orphan"
     )
-    truths: Mapped[Optional[List["truth"]]] = relationship(
+    truths: Mapped[List["truth"]] = relationship(
         "truth", back_populates="user", cascade="all, delete-orphan"
     )
-    dares: Mapped[Optional[List["dare"]]] = relationship(
+    dares: Mapped[List["dare"]] = relationship(
         "dare", back_populates="user", cascade="all, delete-orphan"
     )
 
