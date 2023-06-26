@@ -4,12 +4,14 @@
 <script>
     const searchForTruths = () => {
         const searchInputValue = document.getElementById("truth_text").value;
-        window.location.href = `/pages/search/${searchInputValue}`;
+        window.location.href = `/searchTruth/${searchInputValue}`;
     }
 </script>
+
+
 <style>
     .result{
-        font-family: 'Bungee+Shade', sans-serif;
+
         border: 1px solid;
         background-color: white;
         border-radius: 25px;
@@ -23,11 +25,23 @@
         background-color: #206cd6;
         color: white;
     }
+    .just_text{
+        font-size: 20px;
+        font-family: 'Press Start 2P', cursive;
+        width: 1500px;
+        text-align: center;
+    }
+    #wrapper{
+        margin-top: 20px;
+    }
+    #truth_text{
+        padding: 10px 10px 10px 10px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="flex justify-center flex-col items-center">
+<div id="wrapper" class="flex justify-center flex-col items-center">
     <span class="just_text">Please enter any text and we will see have you came up with something that contains it or not</span>
     <div class="flex my-3 gap-5">
         <input id="truth_text" type="text" placeholder="Text" class="text-xl">

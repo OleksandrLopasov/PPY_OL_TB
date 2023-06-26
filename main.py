@@ -14,7 +14,7 @@ from src.pages.pages_router import pages_router
 
 
 app = FastAPI(
-    title="Gamaster"
+    title="Gamasters"
 )
 
 app.mount("/src/static", StaticFiles(directory="src/static"), name="static")

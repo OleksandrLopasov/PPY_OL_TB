@@ -5,20 +5,18 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Gamasters</title>
 
     {% block head %}{% endblock %}
 
     <link rel="icon" href="/src/static/G.webp">
-    <title>Gamasters</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <style>
-        @font-face {
-            font-family: 'NicePixelFont';
-            src: url(fonts/Minecraft.ttf);
-        }
-
-        body{
+        .wrapper{
             height: 100vh;
             display: flex;
             align-items: center;
@@ -29,41 +27,36 @@
             background-attachment: fixed;
             background-size: cover;
         }
-        h1{
-            font-family: 'NicePixelFont', sans-serif;
-            font-size: 6em;
+        .welcomeTo{
+            margin-top: -150px;
         }
-        h2{
-            font-family: 'NicePixelFont', sans-serif;
-            font-size: 7em;
-        }
-        h1,
-        h2{
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 1.2em;
-            max-width: 50%;
-            text-align: center;
-            color: white;
-        }
-        .login{
-            transform: translateX(-300%) ;
-        }
-        .register{
-            transform: translateX(+230%) translateY(-100%);
+        .registerAndLogin{
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: space-around;
+            font-size: 30px;
+            font-family: 'Press Start 2P', cursive;
+            position: absolute;
+            transform: translateY(-150px);
+            width: 1500px;
         }
     </style>
-
-    <title>Document</title>
 </head>
 <body>
-    <h1>Welcome to</h1>
-    <h2>Truth and dares</h2>
-    <h3>By: GAMASTERS</h3>
-    <div class="login">
-        <p><a href="">Login</a></p>
-    </div>
-    <div class="register">
-        <p>Register</p>
+    <div class="wrapper">
+        <div class="homePage">
+            <div class="container">
+                <div class="welcomeTo">
+                    <img src="/src/static/welcome_page.png" alt="Welcome">
+                </div>
+                <div class="registerAndLogin">
+                    <p><u><a href="https://www.youtube.com/watch?v=bOJdcToho_E&t=54s&ab_channel=Kurosu9">LOGIN</a></u></p>
+                    <p><u>REGISTER</u></p>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
+<script src="https://cdn.tailwindcss.com"></script>
 </html>

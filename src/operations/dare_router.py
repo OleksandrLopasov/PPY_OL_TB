@@ -74,12 +74,58 @@ async def add_dare(new_dare: DareCreate,
         })
 
 
+@dare_router.delete("/delete_dare/{id}")
+async def delete_dare(id_dare: int,
+                      user: User = Depends(current_user),
+                      session: AsyncSession = Depends(get_async_session)):
+    try:
+        query = select(dare).where(dare.id_dare == id_dare)
+        dareToDelete = await session.execute(query)
+        await session.delete(dareToDelete)
+        return {
+            "status": "success",
+            "data": "Successfully removed the item",
+            "details": None
+        }
+    except Exception:
+        raise HTTPException(status_code=400, detail={
+            "status": "error",
+            "data": None,
+            "details": "Something went wrong!"
+        })
+
+
 # add dare to pack
 @dare_router.post("/add_dare_to_pack")
 async def add_dare_to_pack(new_dare_pack: DarePackCreate,
                            user: User = Depends(current_user),
                            session: AsyncSession = Depends(get_async_session)):
-    stmt = insert(dare_pack).values(**new_dare_pack.dict())
-    await session.execute(stmt)
-    await session.commit()
-    return {"status": "success"}
+    try:
+        pack_query = select(pack).filter(user.id).where(pack.id_pack == new_dare_pack.id_pack)
+        pack_check = await session.execute(pack_query)
+        if pack_check is None:
+            raise HTTPException(status_code=404, detail={
+                "status": "error",
+                "data": None,
+                "details": "Pack does not exist"
+            })
+
+        dare_query = select(dare).filter(user.id).where(dare.id_dare == new_dare_pack.id_dare)
+        dare_check = await session.execute(dare_query)
+        if dare_check is None:
+            raise HTTPException(status_code=404, detail={
+                "status": "error",
+                "data": None,
+                "details": "Dare does not exist"
+            })
+
+        stmt = insert(dare_pack).values(**new_dare_pack.dict())
+        await session.execute(stmt)
+        await session.commit()
+        return {"status": "success"}
+    except Exception:
+        raise HTTPException(status_code=400, detail={
+            "status": "error",
+            "data": None,
+            "details": "Something went wrong!"
+        })
