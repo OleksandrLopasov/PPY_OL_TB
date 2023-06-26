@@ -42,7 +42,11 @@ async def get_dares_containing_text(text_to_search: str,
     try:
         query = select(dare).where(dare.text.contains(text_to_search))
         result = await session.execute(query)
-        return result.scalars().all()
+        return {
+            "status": "success",
+            "data": result.scalars().all(),
+            "details": None
+        }
     except Exception:
         raise HTTPException(status_code=400, detail={
             "status": "error",

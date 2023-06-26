@@ -9,15 +9,14 @@
 
     {% block head %}{% endblock %}
     <link rel="icon" href="/src/static/G.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <title>Gamasters</title>
-    <style>
-        @font-face {
-            font-family: 'Bungee+Shade';
-            src: url("/fonts/04B_30__.TTF");
-        }
 
-        body{
+    <style>
+        .wrapper{
             height: 100vh;
             display: flex;
             align-items: center;
@@ -28,24 +27,11 @@
             background-attachment: fixed;
             background-size: cover;
         }
-
-        nav{
-            background-color: #403d3e;
-        }
     </style>
+
 </head>
 <body>
-    <nav class="flex justify-between text-3xl my-3">
-        <ul class="flex ml-10">
-            <li>Gamasters</li>
-        </ul>
-        <ul class="flex gap-5 mr-10">
-            <li>My profile</li>
-            <li>Logout</li>
-        </ul>
-    </nav>
-    <hr>
-    <div id="content">
+    <div class="wrapper">
         {% block content %}{% endblock %}
     </div>
 </body>
