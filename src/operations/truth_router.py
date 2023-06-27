@@ -29,6 +29,8 @@ async def get_truths_containing_text(text_to_search: str,
                                      user: User = Depends(current_user),
                                      session: AsyncSession = Depends(get_async_session)):
     try:
+        if not text_to_search:
+            text_to_search = "example"
         query = select(truth).where(truth.id_user == user.id).where(truth.text.contains(text_to_search))
         result = await session.execute(query)
         return {

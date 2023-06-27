@@ -83,7 +83,7 @@ async def delete_dare(id_dare: int,
                       user: User = Depends(current_user),
                       session: AsyncSession = Depends(get_async_session)):
     try:
-        query = select(dare).where(dare.id_dare == id_dare)
+        query = select(dare).filter(dare.id_user == user.id).where(dare.id_dare == id_dare)
         dareToDelete = await session.execute(query)
         await session.delete(dareToDelete)
         return {
